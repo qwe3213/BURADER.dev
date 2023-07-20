@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.itwillbs.mappers.warehouseMapper">
+    
+    
+<!-- 창고 리스트 -->              
+	<select id="getWarehouseList" resultType="com.itwillbs.domain.WarehouseVO">
+		SELECT whs_id, whs_type, whs_tel, whs_emp,whs_status,emp_name
+        FROM warehouse w, employee e
+        WHERE whs_emp = emp_id and whs_status != 0
+	</select>
+<!-- 창고 리스트 -->
+
+<!-- whs_id, whs_type, whs_tel, whs_status, whs_emp  -->
+     <select id="registWhsid" resultType="com.itwillbs.domain.WarehouseVO">
+     SELECT whs_id, whs_type, whs_tel, whs_emp,whs_status,emp_name
+        FROM warehouse w, employee e
+        WHERE whs_emp = emp_id and whs_id =#{whs_id}
+     </select> 
+
+
+<!-- 창고 등록 -->
+	<insert id ="warehouseInsert">
+		INSERT INTO warehouse (whs_id, whs_type, whs_tel, whs_status, whs_emp, whspr_id)
+		VALUES (#{whs_id} ,#{whs_type}, #{whs_tel}, #{whs_status}, #{whs_emp}, #{whspr_id})
+	</insert>
+<!-- 창고 등록 -->
+
+
+<!-- whs_id 가져오기 -->
+    <select id="warehouseID" resultType="com.itwillbs.domain.WarehouseVO">
+	    SELECT * FROM warehouse
+	    WHERE whs_id = #{whs_id}
+    </select>
+<!-- whs_id 가져오기 -->
+
+
+<!-- 창고정보 수정 -->
+    <update id ="modifyWarehouse">
+	     UPDATE warehouse SET whs_id = #{whs_id} ,whs_type=#{whs_type}, whs_tel=#{whs_tel}, whs_status=#{whs_status}, whs_emp=#{whs_emp}
+	     WHERE whs_id = #{whs_id}
+    </update>
+<!-- 창고정보 수정 -->
+
+
+<!-- 창고정보 삭제 -->
+	<update id="removeWarehouse">
+		UPDATE warehouse SET whs_status = 0
+		WHERE whs_id = #{whs_id}
+	</update> 
+<!-- 창고정보 삭제 -->
+        
+  <!-- 품목코드 최대 값 (maxNumber) 007 -->
+   <select id="getMaxNumber" resultType="String">
+      	SELECT MAX((SUBSTRING(whs_id, 3)))
+		FROM warehouse
+   </select>
+<!-- 품목코드 최대 값 (maxNumber) 007 -->
+  <!-- 품목코드 최대 값 (maxNumber) 007 -->
+   <select id="getMaxprNumber" resultType="String">
+      	SELECT MAX((SUBSTRING(whspr_id, 3)))
+		FROM warehouse
+   </select>
+<!-- 품목코드 최대 값 (maxNumber) 007 -->
+
+<delete id="deleteWhs" >
+        update warehouse SET whs_status = 0
+        where whs_id = #{whs_id}
+     </delete>
+        
+        
+        
+        
+</mapper>

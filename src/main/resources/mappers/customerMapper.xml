@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.itwillbs.mappers.customerMapper">
+
+	<!-- customer 상세보기 -->
+	<select id="getCustomerInfo" resultType="com.itwillbs.domain.CustomerVO">
+		select * from customer where cust_id = #{cust_id}
+	</select>
+	<!-- customer 상세보기 -->
+
+	<!-- customer 등록하기 -->
+	<insert id="insertCustomer">
+		insert into customer (cust_id, cust_name, reg_num, 
+		cust_type, cust_class, owner_name, main_phone, cust_address, 
+		cust_business, cust_event, cust_homepage, emp_id, emp_name, emp_email, emp_tel, 
+		cust_etc, cust_status) 
+		values(#{cust_id}, #{cust_name}, #{reg_num}, #{cust_type}, #{cust_class}, #{owner_name}, 
+		#{main_phone}, #{cust_address}, #{cust_business}, #{cust_event}, 
+		#{cust_homepage}, #{emp_id}, #{emp_name}, #{emp_email}, #{emp_tel}, #{cust_etc}, 0)
+	</insert>
+	<!-- customer 등록하기 -->
+
+	<!-- customer 수정하기 -->
+	<update id="modifyCustomer">
+		update customer set cust_name=#{cust_name},
+		reg_num=#{reg_num}, cust_type=#{cust_type}, cust_class=#{cust_class},
+		owner_name=#{owner_name}, main_phone=#{main_phone},
+		cust_address=#{cust_address}, cust_business=#{cust_business},
+		cust_event=#{cust_event}, emp_name=#{emp_name}, 
+		cust_homepage=#{cust_homepage}, emp_id=#{emp_id},
+		emp_email=#{emp_email}, emp_tel=#{emp_tel}, cust_etc=#{cust_etc}
+		where cust_id=#{cust_id}
+	</update>
+	<!-- customer 수정하기 -->
+
+	<!-- customer 삭제하기 -->
+	<update id="removeCustomer">
+		update customer set cust_status=1
+		where cust_id=#{cust_id}
+	</update>
+	<!-- customer 삭제하기 -->
+	
+	<!-- 	사업자번호 중복체크 -->
+	<select id="regNumCheck" resultType="_int">
+		select count(*) from customer where reg_num = #{reg_num}	
+	</select>
+	<!-- 	사업자번호 중복체크 -->
+
+	<!-- cont_id 자동 카운트 -->
+ 	<select id="getLastGeneratedNumber" resultType="java.lang.String">
+        SELECT cust_id FROM customer ORDER BY cust_id DESC LIMIT 1
+    </select>
+	<!-- cont_id 자동 카운트 -->
+</mapper>

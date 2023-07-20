@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DTD지정  -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.itwillbs.mappers.workOrderMapper">
+
+<!-- 작업지시 목록 -->
+	<select id="getWorkOrderList" resultType="com.itwillbs.domain.ProductionVO">
+		select * from production a, product b, employee e
+		where a.product_id = b.product_id
+		and e.emp_id = a.production_emp
+	</select>
+<!-- 작업지시 목록 -->
+
+<!-- 작업지시 상세 -->
+	<select id="workOrder" resultType="com.itwillbs.domain.ProductionVO">
+	SELECT *
+	FROM production a
+	JOIN product b ON a.product_id = b.product_id
+	JOIN employee e ON a.production_emp = e.emp_id
+	LEFT JOIN qc q ON a.qc_id = q.qc_num
+	WHERE a.production_id = #{production_id}
+	</select>
+<!-- 		select *  -->
+<!-- 		from production a, product b, employee e -->
+<!-- 		where a.product_id = b.product_id -->
+<!-- 		and a.production_emp = e.emp_id -->
+<!-- 		and a.production_id = #{production_id}; -->
+<!-- 작업지시 상세 -->
+
+<!-- 작업지시 등록 -->
+		<select id="insertSearch" resultType="com.itwillbs.domain.ProductionVO">
+			select *
+			from production a,
+		     	 product b
+			where a.product_id = b.product_id
+			and a.production_id = #{production_id}
+		</select>
+	<!-- 수주번호 조회 -->
+	<select id="woInsertSearch" resultType="com.itwillbs.domain.ProductionVO">
+			select *
+ 			from product p, contract c
+			where p.product_id = c.product_id
+			and c.cont_id = #{cont_id}
+	</select>
+	<!-- 수주번호 조회 -->
+	
+	<!-- 자재 재고 조회 -->
+	<select id="getMaterialList" resultType="com.itwillbs.domain.ProductionVO">
+		select pm.ma_name, pm.use_qty, m.ma_qty, m.unit, pm.product_id 
+		from pr_material pm, material m
+		where pm.ma_name = m.ma_name
+		and pm.product_id = #{product_id}
+	</select>
+	<!-- 자재 재고 조회 -->
+	<!-- cont_id 자동 카운트 -->
+	 	<select id="getLastGeneratedNumber" resultType="java.lang.String">
+	        SELECT production_id FROM production ORDER BY production_id DESC LIMIT 1
+	    </select>
+	<!-- cont_id 자동 카운트 -->
+	<!-- DB 등록 -->
+	<insert id="insertWorkOrder">
+		insert IGNORE into production(production_id,cont_id,production_emp,production_date,production_line,
+		product_id,plan_qty,workOrder_status, del_woStatus) 
+		values(#{production_id},#{cont_id},#{production_emp},now(),#{production_line},
+		#{product_id},#{plan_qty},'대기', '0')
+	</insert>
+	<!-- 해당 수주번호에 작업지시번호 저장 -->
+	<update id="prIdContUpdate">
+		update contract
+		set production_id = #{production_id}
+		where cont_id = #{cont_id}		
+	</update>
+	<!-- 해당 수주번호에 작업지시번호 저장 -->
+	<!-- 자재 update(저장, 삭제 둘 다 사용) -->
+	<update id="maQtyUpdate" >
+		 UPDATE material
+	     SET ma_qty = #{ma_qty}
+	     WHERE ma_name = #{ma_name}
+	</update>
+	<!-- 자재 update(저장, 삭제 둘 다 사용) -->
+<!-- 작업지시 등록 -->
+
+<!-- 작업지시 삭제 -->
+	<!-- DB 등록 -->
+	<update id="delWorkOrder">
+		update production
+		set del_woStatus = '1'
+		where production_id = #{production_id}
+	</update>
+	<update id="delWoCont">
+		update contract
+		set production_id = NULL
+		where production_id = #{production_id}
+	</update>		
+<!-- 작업지시 삭제 -->
+
+
+</mapper>

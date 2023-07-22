@@ -70,7 +70,7 @@ $('.modify').click(function(){
 						str += "<td>"+ obj.whs_id +"</td>";
 						str += "<td><input type='text' id='whs_type' name='whs_type' value="+ obj.whs_type +" readonly></td>";
 						str += "<td><input type='text' id='whs_tel' name='whs_tel'  value="+ obj.whs_tel +"></td>";
-						str += "<td>미사용<input type='radio' id='whs_status' name='whs_status' value='2'>사용<input type='radio' id='whs_status' name='whs_status' value='1'></td>";
+						str += "<td>미사용<input type='radio' id='whs_status' name='whs_status' value='2' checked>사용<input type='radio' id='whs_status' name='whs_status' value='1'></td>";
 						str += "<td><input type='text' id='whs_emp' name='whs_emp' value="+ obj.emp_name +"></td>";
 						// 담당직원 세션에 저장된 아이디 들고오기
 						str += "</tr>";			
